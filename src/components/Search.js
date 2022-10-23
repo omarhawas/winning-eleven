@@ -7,12 +7,10 @@ import players from "../players";
 
 // var Typeahead = require("react-bootstrap-typeahead").Typeahead;
 
-const Search = () => {
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
-
-  const handleClick = () => {
-    setSelectedPlayers();
-    console.log("selected", selectedPlayers);
+const Search = ({ selectedPlayers, onSelectedPlayerChange }) => {
+  const handlePlayerChange = (selected) => {
+    onSelectedPlayerChange(selected);
+    console.log("selected", selected);
   };
 
   return (
@@ -21,15 +19,14 @@ const Search = () => {
         <Form.Label>Search for players</Form.Label>
         <Typeahead
           id="basic-typeahead-single"
-          multiple={true}
-          labelKey="full_name"
+          labelKey={(option) => `${option.full_name} (${option.position})`}
           options={players}
           placeholder="Search..."
-          defaultSelected={selectedPlayers}
+          multiple={true}
+          onChange={handlePlayerChange}
+          selected={selectedPlayers}
+          filterBy={["full_name"]}
         />
-        <Button variant="success" onClick={handleClick}>
-          Submit
-        </Button>
       </Form.Group>
     </>
   );
