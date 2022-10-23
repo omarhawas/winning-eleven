@@ -11,9 +11,15 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [playersOnPitch, setPlayersOnPitch] = useState([]);
 
   const handleSelectedPlayerChange = (selected) => {
     setSelectedPlayers(selected);
+  };
+
+  const handleUpdatePlayersOnPitch = (player) => {
+    console.log("playersOnPitch ", playersOnPitch);
+    setPlayersOnPitch([...playersOnPitch, player]);
   };
 
   return (
@@ -30,7 +36,11 @@ function App() {
         </Row>
         <Row>
           <Col>
-            <Pitch players={players} />
+            <Pitch
+              players={players}
+              playersOnPitch={playersOnPitch}
+              onUpdatePlayersOnPitch={handleUpdatePlayersOnPitch}
+            />
           </Col>
           <Col>
             <PlayerCards players={selectedPlayers} />

@@ -7,22 +7,30 @@ import Col from "react-bootstrap/Col";
 
 const generatePlayerPositions = (players) => {
   let playerPositions = {};
-  for (let player in players) {
+  for (let player of players) {
     const position = player.position;
     if (position === "Goalkeeper") {
       playerPositions[player.full_name] = [5, 1];
+    } else if (position === "Defender") {
+      playerPositions[player.full_name] = [2, 2];
+    } else if (position === "Midfielder") {
+      playerPositions[player.full_name] = [2, 5];
+    } else if (position === "Forward") {
+      playerPositions[player.full_name] = [3, 9];
     }
   }
   return playerPositions;
 };
 
 const PlayerOrEmpty = ({ row, col, playerPositions, players }) => {
-  console.log("playerPositions", playerPositions);
-  return (
-    <div>
-      {row}-{col}
-    </div>
-  );
+  let player = null;
+  for (let playerName in playerPositions) {
+    const playerPosition = playerPositions[playerName];
+    if (playerPosition[0] === row && playerPosition[1] === col) {
+      player = playerName;
+    }
+  }
+  return <div>{player && <div>{player}</div>}</div>;
 };
 
 const generateColumns = (row, playerPositions, players) => {
@@ -56,13 +64,11 @@ const GridLayout = ({ players }) => {
 };
 
 const Pitch = (props) => {
-  const [playersOnPitch, setPlayersOnPitch] = useState([]);
-
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "player",
     drop: (item, monitor) => {
-      setPlayersOnPitch([...playersOnPitch, item]);
-      console.log(`You ddddd`, item);
+      console.log("props.playersOnPitch --> ", props.playersOnPitch);
+      props.onUpdatePlayersOnPitch(item);
     },
   }));
 
@@ -79,7 +85,7 @@ const Pitch = (props) => {
           backgroundColor: "#588f58",
         }}
       >
-        <GridLayout players={playersOnPitch} />
+        <GridLayout players={props.playersOnPitch} />
         {/* <Row>
           {playersOnPitch.map((player) => {
             return (
