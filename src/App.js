@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PlayerCards from "./components/PlayerCards";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
@@ -16,23 +18,25 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Winning Eleven</h1>
-      <Row>
-        <Col>
-          <Search
-            selectedPlayers={selectedPlayers}
-            onSelectedPlayerChange={handleSelectedPlayerChange}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Pitch players={players} />
-        </Col>
-        <Col>
-          <PlayerCards players={selectedPlayers} />
-        </Col>
-      </Row>
+      <DndProvider backend={HTML5Backend}>
+        <h1>Winning Eleven</h1>
+        <Row>
+          <Col>
+            <Search
+              selectedPlayers={selectedPlayers}
+              onSelectedPlayerChange={handleSelectedPlayerChange}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Pitch players={players} />
+          </Col>
+          <Col>
+            <PlayerCards players={selectedPlayers} />
+          </Col>
+        </Row>
+      </DndProvider>
     </div>
   );
 }
